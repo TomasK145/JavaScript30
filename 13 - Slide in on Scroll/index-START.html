@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -43,7 +43,7 @@
   </div>
 
   <script>
-    function debounce(func, wait = 20, immediate = true) {
+    function debounce(func, wait = 20, immediate = true) { //zabezpeci ze func bude bezat len raz za isty cas
       var timeout;
       return function() {
         var context = this, args = arguments;
@@ -57,6 +57,28 @@
         if (callNow) func.apply(context, args);
       };
     }
+
+      const sliderImages = document.querySelectorAll('.slide-in');
+
+      function checkSlide(e) {
+          sliderImages.forEach(slideImager => {
+              //half way through the image
+              const slideInAt = (window.scrollY + window.innerHeight) - (slideImager.height / 2);
+              //buttom of the image
+              const imageButtom = slideImager.offsetTop + slideImager.height;
+
+              const isHalfShown = slideInAt > slideImager.offsetTop;
+              const isNotScrolledPast = window.scrollY < imageButtom;
+              if (isHalfShown && isNotScrolledPast) {
+                  slideImager.classList.add('active');
+              } else {
+                  slideImager.classList.remove('active');
+              }
+          })
+
+      }
+
+      window.addEventListener('scroll', debounce(checkSlide));
 
   </script>
 
