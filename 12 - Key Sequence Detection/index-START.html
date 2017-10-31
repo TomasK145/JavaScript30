@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -7,6 +7,17 @@
 </head>
 <body>
 <script>
+    const pressed = [];
+    const secretCode = 'tomask';
+
+    window.addEventListener('keyup', (e) => {
+        pressed.push(e.key); //vlozenie kazdeho stlaceneho znaku do pola
+        pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length); //zachovanie len poslednych 6 znakov v poli
+        if (pressed.join('').includes(secretCode)) {
+            console.log('DING DING!');
+            cornify_add();
+        }
+    });
 </script>
 </body>
 </html>
