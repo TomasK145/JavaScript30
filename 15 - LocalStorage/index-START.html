@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -26,9 +26,63 @@
   </div>
 
 <script>
-  const addItems = document.querySelector('.add-items');
-  const itemsList = document.querySelector('.plates');
-  const items = [];
+    const addItems = document.querySelector('.add-items');
+    const itemsList = document.querySelector('.plates');
+    const items = JSON.parse(localStorage.getItem('items')) || [];
+    //pokusi sa ziskat item z localStorage, ak neexistuje vrati prazdne pole
+
+    function addItem(e) {
+        e.preventDefault(); //zabrani refreshu stranky
+        const text = (this.querySelector('[name=item]')).value;
+        const item = {          //vytvorenie objektu
+            text: text,
+            done: false
+        };
+        items.push(item);
+        populateList(items, itemsList);
+        localStorage.setItem('items', JSON.stringify(items)); //pridanie itemu do localStorage
+        //JSON.stringify - convertuje objekt do string
+        this.reset(); //reset aktualneho elementu (v tomto pripade form)
+    }
+
+    function populateList(plates = [], platesList) { //[] prazdne pole ako default parameter, v pripade nevlozenia parametra aby sa nevyskytla v js chyba
+        //nasledujuca cast prechadza cez kazdy item v plates
+        //map - pracuje s array a vrati array upravene podla definicie
+        //potrebne join nakonci, pretoze map vraci array
+        platesList.innerHTML = plates.map((plate, i) => { 
+            return `
+                <li>
+                    <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked' : ''} /> 
+                    <label for="item${i}">${plate.text}</label>
+                </li>
+            `;
+        }).join('');
+        //{plate.done ? 'checked' : ''} --> nastavenie checkboxu na checked v zavislosti od hodnoty property done daneho objektu
+    }
+
+    function toggleDone(e) {
+        if (!e.target.matches('input')) return; //nevykona sa pokial to nieje input element
+        const el = e.target;
+        const index = el.dataset.index; //dataset obsahuje vsetky data- v danom elemente
+        items[index].done = !items[index].done;
+        localStorage.setItem('items', JSON.stringify(items));
+        populateList(items, itemsList);
+    }
+
+    addItems.addEventListener('submit', addItem);
+    itemsList.addEventListener('click', toggleDone); //<ul> element (itemList) existuje v case nastavovania event listenerov
+    //preto bude nastavovanie checkboxov handlovane tymto sposobom --> event delegation
+
+    //const checkBoxes = document.querySelectorAll('input');
+    //checkBoxes.forEach(input => input.addEventListener('click', () => alert('hi')));
+    //handlovanie eventov nebolo spravne, pretoze itemy v case nastavovania event listenerov neexistovali
+
+    //toto volanie fnc sa vykona pocas page_load
+    populateList(items, itemsList);
+
+
+
+    //TODO: pridat buttons na clear all, check all a uncheck all
 
 </script>
 
