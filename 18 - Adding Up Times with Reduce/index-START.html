@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -182,6 +182,29 @@
     </li>
   </ul>
 <script>
+    //const timeNodes = document.querySelectorAll('[data-time]'); //defaultne je to nodeList
+    //const timeNodes = [...document.querySelectorAll('[data-time]')]; //konverzia nodelist na array 1
+    const timeNodes = Array.from(document.querySelectorAll('[data-time]')); //konverzia nodeList na array 2
+
+    const seconds = timeNodes
+        .map(node => node.dataset.time)
+        .map(timeCode => {
+            const [mins, secs] = timeCode.split(':').map(parseFloat);
+            return (mins * 60) + secs;
+        })
+        .reduce((total, vidSeconds) => total + vidSeconds);
+
+    let secondesLeft = seconds;
+    const hours = Math.floor(secondesLeft / 3600); //zaokruhlenie
+    secondesLeft = secondesLeft % 3600;
+
+    const mins = Math.floor(secondesLeft / 60);
+    secondesLeft = secondesLeft % 60;
+
+    console.log(hours + ' ' + mins + ' ' + secondesLeft);
+
+    //timeCode.split(':').map(parseFloat) --> split splitne string opat len na string premenne
+    //preto ked sa pouzije map(parseFloat) tak je ten string prekonvertovany na float
 </script>
 </body>
 </html>
