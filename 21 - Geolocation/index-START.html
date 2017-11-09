@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -57,7 +57,16 @@
     }
     /*Compass: https://thenounproject.com/search/?q=compass&i=592352*/
   </style>
-  <script>
-  </script>
+<script>
+    navigator.geolocation.watchPosition((data) => {
+        console.log(data);
+        console.log(data.coords);
+        console.log('latitude: ' + data.coords.latitude + ' - longitude : ' + data.coords.longitude);
+    }, (err) => {
+        console.log(err);
+        alert('Geolocation not allowed!');
+    });
+
+</script>
 </body>
 </html>
