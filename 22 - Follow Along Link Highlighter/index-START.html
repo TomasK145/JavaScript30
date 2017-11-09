@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -27,6 +27,28 @@
 
   <script>
     // 👀👀👀👀👀👀👀👀👀👀👀👀👀👀👀
+      const triggers = document.querySelectorAll('a');
+      const highlight = document.createElement('span'); //vytvorenie elementu span
+    highlight.classList.add('highlight'); //pridanie css classy
+      document.body.append(highlight);
+
+      function highlightLink() {
+          const linkCoords = this.getBoundingClientRect(); //ziskanie info o element na ktorom sa vyskytol event
+          const coords = {
+              width: linkCoords.width,
+              height: linkCoords.height,
+              top: linkCoords.top + window.scrollY,
+              left: linkCoords.left + window.scrollX
+      }
+          highlight.style.width = `${coords.width}px`; 
+          highlight.style.height = `${coords.height}px`;
+          //highlight.style.transform = `translate(${linkCoords.left}px, ${linkCoords.top}px)`; //povodne linkCoords nebrali do uvahy scrolovanie (window.scrollX a window.scrollY)
+          highlight.style.transform = `translate(${coords.left}px, ${coords.top}px)`; 
+      }
+
+      triggers.forEach(a => a.addEventListener('mouseenter', highlightLink));
+
+
   </script>
 </body>
 </html>
