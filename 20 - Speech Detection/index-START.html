@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -12,6 +12,30 @@
 <script>
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
+    const recognition = new SpeechRecognition();
+    recognition.interimResults = true; // zobrazi vysledky textu uz pocas rozpravania, netreba cakat na skoncenie rozpravania
+
+    let p = document.createElement('p');
+    const words = document.querySelector('.words');
+    words.append(p);
+
+  recognition.addEventListener('result',
+      e => {
+          const transcript = Array.from(e.results)
+              .map(result => result[0])
+              .map(result => result.transcript)
+              .join('');
+          p.textContent = transcript;
+          if (e.results[0].isFinal) {
+              p = document.createElement('p');
+              words.appendChild(p);
+          }
+
+          console.log(transcript);
+        });
+  recognition.addEventListener('end', recognition.start); //po dohovoreni slova/vety, spusti opatovne nahravanie
+
+  recognition.start();
 
 </script>
 
