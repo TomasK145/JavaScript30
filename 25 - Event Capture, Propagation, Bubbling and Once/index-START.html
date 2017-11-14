@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -39,7 +39,30 @@
 
 <button></button>
 <script>
+    const divs = document.querySelectorAll('div');
+    const button = document.querySelector('button');
 
+    function logText(e) {
+        console.log(this.classList.value);
+        //ked klikneme na DIV3 tak sa element prejavi na DIV2, DIV1, ... bubling
+
+        //e.stopPropagation(); //event sa nepropaguje vyssie v hierarchii (bubling) //netrigeruje eventy na parent elemente
+    }
+
+    //divs.forEach(div => div.addEventListener('click', logText)); //event handlovany: DIV3 (sem kliknute) --> DIV2 --> DIV1
+    //divs.forEach(div => div.addEventListener('click', logText, { capture: true })); //event sa handluje: DIV1 --> DIV2 --> DIV3 (sem kliknute)
+    divs.forEach(div => div.addEventListener('click', logText, {
+        capture: false, //capture - meni poradie propagacie eventu 
+        //capture:false --> od zdroja eventu vyssie, pr: DIV3 --> DIV2 --> DIV1
+        //capture:true --> od najvyssieho parenta ku zdroju eventu, pr. DIV1 --> DIV2 --> DIV3
+        once: true //sposobi, ze je mozne handlovat event len raz, nasledne sa eventListener odstrani
+    }));
+
+    button.addEventListener('click', () => {
+        console.log('click!!!');
+    }, {
+            once: true //event handlovany len raz, potom sa eventListener odstrani
+    });
 </script>
 </body>
 </html>
